@@ -180,13 +180,22 @@ From the collected job postings, tally the frequency of each skill/requirement m
 
 ### 4.2 Trend Identification
 
-Compare this week's data against the previous 4 digests (if available) to identify:
+Read all archived digests from `Projects/JobPostings/archive/` before performing trend analysis. Compare this week's data against multiple time horizons:
+
+- **vs last week**: New skills, roles gained/lost, comp changes
+- **vs 4 weeks ago (1 month)**: Skills rising/declining in frequency, company hiring patterns
+- **vs 12 weeks ago (3 months)**: Market direction (expanding/contracting), major skill shifts, fit trend for user profile
+- **vs 24 weeks ago (6 months)**: Long-arc narrative, skill evolution, comp trajectory
+
+Specific signals to track:
 
 - New skills appearing for the first time
 - Skills growing in frequency (>20% week-over-week)
 - New companies entering the hiring market
 - Compensation shifts
 - Location/remote policy changes
+- Changes in % of roles matching user's domain (rec/search/ads)
+- Changes in % of roles requiring LLM vs traditional ML experience
 
 ---
 
@@ -205,6 +214,7 @@ The digest follows this fixed structure:
 ## 🏢 Prestige Companies Hiring    ← Tier 1, 2, 3 company tables
 ## 🔥 Top Skills in Demand         ← Ranked skills table with frequency
 ## 📈 Trends This Week             ← 3–5 bullet trend analysis
+## 📉 Historical Trends            ← 1-week, 1-month, 3-month, 6-month comparisons
 ## 🎯 Skills → Experience Map      ← How to demonstrate each skill
 ## 🧭 Applied AI PM Analysis       ← Personalized assessment for user profile
 ## 🔗 Job Board Quick Links        ← Curated links
@@ -261,12 +271,75 @@ The digest follows this fixed structure:
 - For each of the top 10 skills, provide 2–3 sentences describing what kind of PM experience or past projects would demonstrate competency
 - Be specific and actionable — not generic advice
 
-### 5.6 Trends Section
+### 5.6 Trends Section (with Historical Analysis)
+
+Before writing trends, **read all archived digests** in `Projects/JobPostings/archive/` to build historical context.
+
+#### 5.6.1 Weekly Trends (This Week vs Last Week)
 
 - 3–5 numbered bullets
 - Each trend = 2–3 sentences max
-- Focus on what changed THIS week vs previous weeks
+- Focus on what changed THIS week vs the previous week
 - If this is the first digest, compare against general 2025→2026 trajectory
+
+#### 5.6.2 Historical Trend Summary
+
+After the weekly trends, include a **multi-horizon trend summary** that compares the current week against 1-month, 3-month, and 6-month baselines.
+
+##### Data to Track Across Digests
+
+For each archived digest, extract and compare these metrics:
+
+| Metric | How to Compare |
+|--------|---------------|
+| Total qualifying roles found | Count trend over time |
+| % of roles that are 🟢 High Fit | Is the market getting better or worse for this profile? |
+| Top 3 skills by frequency | Which skills are rising, stable, or declining? |
+| Median base salary (Senior AI PM) | Comp trending up, flat, or down? |
+| % of roles requiring LLM/GenAI experience | How fast is the LLM shift happening? |
+| % of roles requiring agentic AI | New skill — how fast is it growing? |
+| % of roles that are remote-eligible | Remote trend direction |
+| Top hiring companies | Who's consistently hiring vs one-time postings? |
+| New companies entering the market | First-time posters this week |
+
+##### Output Format
+
+```
+### 📉 Historical Trends
+
+#### 1-Week Delta (vs previous week)
+- Roles: {N} this week vs {N} last week ({+/-X%})
+- High Fit roles: {n} vs {n} ({+/-})
+- Notable: {1-sentence on biggest change}
+
+#### 1-Month Trend (4-week rolling)
+- Average roles/week: {N} (trend: ↑/↓/→)
+- Skills rising: {skill1} ({X%} → {Y%}), {skill2}
+- Skills declining: {skill1} ({X%} → {Y%})
+- Comp trend: {direction} ({median 4 weeks ago} → {median now})
+
+#### 3-Month Trend (12-week rolling)
+- Market direction: {expanding / contracting / stable}
+- Biggest shift: {1-sentence, e.g., "Agentic AI went from 30% to 78% of JDs"}
+- Your fit trend: {improving / declining / stable} — {1-sentence why}
+- Companies that hired consistently: {list top 3-5}
+
+#### 6-Month Trend (24-week rolling, when available)
+- Market narrative: {2-3 sentences summarizing the half-year arc}
+- Skill evolution: {what was hot 6 months ago vs now}
+- Comp trajectory: {base salary movement over 6 months}
+- Strategic takeaway: {1-sentence advice based on the long-term trend}
+```
+
+##### Handling Missing History
+
+| Archived Digests Available | What to Generate |
+|---------------------------|-----------------|
+| 0 (first edition) | Weekly trends only; note "First edition — no historical baseline" |
+| 1–3 digests | Weekly delta + partial 1-month trend; note limited data |
+| 4+ digests | Weekly delta + full 1-month trend |
+| 12+ digests | Weekly + 1-month + 3-month trends |
+| 24+ digests | All four horizons (1-week, 1-month, 3-month, 6-month) |
 
 ### 5.7 All Open Roles (Complete Listing)
 
@@ -401,10 +474,13 @@ Projects/JobPostings/weekly_ai_pm_hiring_digest.md
 ### 6.2 Overwrite Policy
 
 - Each week's digest **overwrites** the previous file
-- Archive the previous digest by renaming it before overwriting:
+- Archive the previous digest before overwriting into `Projects/JobPostings/archive/`:
   ```
-  weekly_ai_pm_hiring_digest_{YYYY-MM-DD}.md
+  Projects/JobPostings/archive/weekly_ai_pm_hiring_digest_{YYYY-MM-DD}.md
   ```
+- Create the `archive/` directory if it doesn't exist
+- **Do not delete archives** — they are the data source for historical trend analysis (Step 5.6.2)
+- Archives older than 6 months may be summarized into a `trend_history.md` file and removed to save space
 
 ### 6.3 Footer
 
@@ -432,6 +508,8 @@ Before finalizing:
 - [ ] Skills table has ≥ 10 entries ranked by frequency
 - [ ] Skills → Experience map covers all top 10 skills
 - [ ] Trends section has 3–5 bullets with specific observations
+- [ ] **Historical Trends section** includes all applicable horizons based on archive depth
+- [ ] **Archived digests were read** before generating trends (confirm archive count in digest)
 - [ ] **Applied AI PM Analysis** includes all 5 subsections (Position, Strengths, Headwinds, Priorities, Advice)
 - [ ] **Top 5 Roles to Prioritize** are selected from the All Open Roles table with specific reasoning
 - [ ] **Competitiveness Advice** has 3–5 items, each tied to a specific gap and actionable within 1–4 weeks
@@ -484,5 +562,6 @@ Before finalizing:
 |------|----------|
 | Digest generation | Every **Monday** |
 | Data freshness | Searches executed at generation time (no caching) |
-| Archive retention | Keep last 8 weekly digests |
-| Trend comparison window | Current week vs previous 4 weeks |
+| Archive retention | Keep **all** archives (needed for 6-month trend analysis) |
+| Trend comparison window | 1-week, 1-month (4 weeks), 3-month (12 weeks), 6-month (24 weeks) |
+| Historical read | Before each generation, read all files in `Projects/JobPostings/archive/` |
